@@ -1,0 +1,118 @@
+{% extends 'main/form_page.html' %}
+
+{% block throw_ball_active %}
+    active
+{% endblock %}
+
+{% block parameters_of_the_calculation_scheme %}
+    <div class="form-group">
+        <div class="invalid-feedback">{{ form.experiment_time.errors }}</div>
+        {{ form.experiment_time.label_tag }}
+        <input id="{{ form.experiment_time.id_for_label }}" name="{{ form.experiment_time.html_name }}" type="number"
+               class="form-control" value="{{ form.experiment_time.value }}">
+    </div>
+    <div class="form-group">
+        <div class="invalid-feedback">{{ form.step_amount.errors }}</div>
+        {{ form.step_amount.label_tag }}
+        <input id="{{ form.step_amount.id_for_label }}" name="{{ form.step_amount.html_name }}" type="number"
+               class="form-control" value="{{ form.step_amount.value }}">
+    </div>
+{% endblock %}
+
+{% block initial_conditions %}
+    <div class="form-group">
+        <div class="invalid-feedback">{{ form.start_x.errors }}</div>
+        {{ form.start_x.label_tag }}
+        <input id="{{ form.start_x.id_for_label }}" name="{{ form.start_x.html_name }}" type="number"
+               class="form-control" value="{{ form.start_x.value }}" step="0.001">
+    </div>
+    <div class="form-group">
+        <div class="invalid-feedback">{{ form.start_y.errors }}</div>
+        {{ form.start_y.label_tag }}
+        <input id="{{ form.start_y.id_for_label }}" name="{{ form.start_y.html_name }}" type="number"
+               class="form-control" value="{{ form.start_y.value }}" step="0.001">
+    </div>
+    <div class="form-group">
+        <div class="invalid-feedback">{{ form.start_speed.errors }}</div>
+        {{ form.start_speed.label_tag }}
+        <input id="{{ form.start_speed.id_for_label }}" name="{{ form.start_speed.html_name }}" type="number"
+               class="form-control" value="{{ form.start_speed.value }}" step="0.001">
+    </div>
+    <div class="form-group">
+        <div class="invalid-feedback">{{ form.start_angle.errors }}</div>
+        {{ form.start_angle.label_tag }}
+        <input id="{{ form.start_angle.id_for_label }}" name="{{ form.start_angle.html_name }}" type="number"
+               class="form-control" value="{{ form.start_angle.value }}" step="0.1">
+    </div>
+{% endblock %}
+
+{% block parameters_of_the_model %}
+    <div class="form-group">
+        <div class="invalid-feedback">{{ form.body_mass.errors }}</div>
+        {{ form.body_mass.label_tag }}
+        <input id="{{ form.body_mass.id_for_label }}" name="{{ form.body_mass.html_name }}" type="number"
+               class="form-control" value="{{ form.body_mass.value }}" step="0.001" min="0.001">
+    </div>
+
+    <div class="form-check">
+        <label for="{{ form.using_complex_gravity.id_for_label }}" class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="{{ form.using_complex_gravity.html_name }}"
+                   id="{{ form.using_complex_gravity.id_for_label }}" {% if form.using_complex_gravity.value %}
+                   checked {% endif %} v-model="using_complex_gravity">
+            {{ form.using_complex_gravity.label }}
+        </label>
+    </div>
+
+    <div class="form-check">
+        <label for="{{ form.using_archimedes_force.id_for_label }}" class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="{{ form.using_archimedes_force.html_name }}"
+                   id="{{ form.using_archimedes_force.id_for_label }}" {% if form.using_archimedes_force.value %}
+                   checked {% endif %} v-model="using_archimedes_force">
+            {{ form.using_archimedes_force.label }}
+        </label>
+    </div>
+    <fieldset class="form-group" v-if="using_archimedes_force">
+        <div class="invalid-feedback">{{ form.body_density.errors }}</div>
+        {{ form.body_density.label_tag }}
+        <input id="{{ form.body_density.id_for_label }}" name="{{ form.body_density.html_name }}" type="number"
+               class="form-control" value="{{ form.body_density.value }}">
+    </fieldset>
+
+    <div class="form-check">
+        <label for="{{ form.using_environment_resistance.id_for_label }}" class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="{{ form.using_environment_resistance.html_name }}"
+                   id="{{ form.using_environment_resistance.id_for_label }}"
+                    {% if form.using_environment_resistance.value %} checked {% endif %} v-model="using_environment_resistance">
+            {{ form.using_environment_resistance.label }}
+        </label>
+    </div>
+    <fieldset class="form-group" v-if="using_environment_resistance">
+        <div class="invalid-feedback">{{ form.resistance_coefficient.errors }}</div>
+        {{ form.resistance_coefficient.label_tag }}
+        <input id="{{ form.resistance_coefficient.id_for_label }}" name="{{ form.resistance_coefficient.html_name }}"
+               type="number"
+               class="form-control" value="{{ form.resistance_coefficient.value }}">
+    </fieldset>
+
+    <div class="form-check">
+        <label for="{{ form.using_wind.id_for_label }}" class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="{{ form.using_wind.html_name }}"
+                   id="{{ form.using_wind.id_for_label }}" {% if form.using_wind.value %} checked {% endif %} v-model="using_wind">
+            {{ form.using_wind.label }}
+        </label>
+    </div>
+    <fieldset class="form-group" v-if="using_wind">
+        <div class="invalid-feedback">{{ form.wind_speed.errors }}</div>
+        {{ form.wind_speed.label_tag }}
+        <input id="{{ form.wind_speed.id_for_label }}" name="{{ form.wind_speed.html_name }}" type="number"
+               class="form-control" value="{{ form.wind_speed.value }}">
+    </fieldset>
+
+    <fieldset class="form-group" v-if="using_environment_resistance || using_archimedes_force">
+        <div class="invalid-feedback">{{ form.environment_density.errors }}</div>
+        {{ form.environment_density.label_tag }}
+        <input id="{{ form.environment_density.id_for_label }}" name="{{ form.environment_density.html_name }}"
+               type="number"
+               class="form-control" value="{{ form.environment_density.value }}">
+    </fieldset>
+{% endblock %}

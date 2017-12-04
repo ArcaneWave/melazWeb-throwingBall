@@ -1,0 +1,38 @@
+{% extends 'common/app.html' %}
+
+{% block content %}
+    <main id="app" class="container">
+        <div class="row">
+            <div class="col">
+                <h1>{{ title }}</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="invalid-feedback">{{ form.non_field_errors }}</div>
+
+                    <fieldset class="form-group">
+                        <legend>Параметры расчётной схемы</legend>
+
+                        {% block parameters_of_the_calculation_scheme %}
+                        {% endblock %}
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <legend>Начальные условия</legend>
+
+                        {% block initial_conditions %}
+                        {% endblock %}
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <legend>Параметры модели</legend>
+
+                        {% block parameters_of_the_model %}
+                        {% endblock %}
+                    </fieldset>
+
+                    <button class="btn btn-primary">Рассчитать</button>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}
