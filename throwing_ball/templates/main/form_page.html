@@ -3,7 +3,7 @@
 {% block content %}
     <main id="app" class="container">
         <div class="row">
-            <div class="col">
+            <div class="col-12">
                 <h1>{{ title }}</h1>
                 <form method="post">
                     {% csrf_token %}
@@ -32,6 +32,18 @@
 
                     <button class="btn btn-primary">Рассчитать</button>
                 </form>
+            </div>
+            <div class="col-12 mt-2">
+                <ul class="list-group">
+                    {% block variables_list %}
+                    {% endblock %}
+                </ul>
+            </div>
+            <div class="col-12 mt-2">
+                <table class="table">
+                    {% block experiment_table %}
+                    {% endblock %}
+                </table>
             </div>
         </div>
     </main>

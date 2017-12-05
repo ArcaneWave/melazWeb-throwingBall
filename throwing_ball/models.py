@@ -21,3 +21,4 @@ class ThrowingBall(models.Model):
     environment_density = models.IntegerField('Плотность окружающей среды', default=1000)
     resistance_coefficient = models.FloatField('Коэффициент сопротивления окружающей среды', default=1)
     wind_speed = models.FloatField('Скорость ветра, м/с', default=-4)
+    water_environment = models.BooleanField('Водная среда', default=False)

@@ -9,13 +9,13 @@
         <div class="invalid-feedback">{{ form.experiment_time.errors }}</div>
         {{ form.experiment_time.label_tag }}
         <input id="{{ form.experiment_time.id_for_label }}" name="{{ form.experiment_time.html_name }}" type="number"
-               class="form-control" value="{{ form.experiment_time.value }}">
+               class="form-control" value="{{ form.experiment_time.value }}" required>
     </div>
     <div class="form-group">
         <div class="invalid-feedback">{{ form.step_amount.errors }}</div>
         {{ form.step_amount.label_tag }}
         <input id="{{ form.step_amount.id_for_label }}" name="{{ form.step_amount.html_name }}" type="number"
-               class="form-control" value="{{ form.step_amount.value }}">
+               class="form-control" value="{{ form.step_amount.value }}" required>
     </div>
 {% endblock %}
 
@@ -24,25 +24,25 @@
         <div class="invalid-feedback">{{ form.start_x.errors }}</div>
         {{ form.start_x.label_tag }}
         <input id="{{ form.start_x.id_for_label }}" name="{{ form.start_x.html_name }}" type="number"
-               class="form-control" value="{{ form.start_x.value }}" step="0.001">
+               class="form-control" value="{{ form.start_x.value }}" step="0.001" required>
     </div>
     <div class="form-group">
         <div class="invalid-feedback">{{ form.start_y.errors }}</div>
         {{ form.start_y.label_tag }}
         <input id="{{ form.start_y.id_for_label }}" name="{{ form.start_y.html_name }}" type="number"
-               class="form-control" value="{{ form.start_y.value }}" step="0.001">
+               class="form-control" value="{{ form.start_y.value }}" step="0.001" required>
     </div>
     <div class="form-group">
         <div class="invalid-feedback">{{ form.start_speed.errors }}</div>
         {{ form.start_speed.label_tag }}
         <input id="{{ form.start_speed.id_for_label }}" name="{{ form.start_speed.html_name }}" type="number"
-               class="form-control" value="{{ form.start_speed.value }}" step="0.001">
+               class="form-control" value="{{ form.start_speed.value }}" step="0.001" required>
     </div>
     <div class="form-group">
         <div class="invalid-feedback">{{ form.start_angle.errors }}</div>
         {{ form.start_angle.label_tag }}
         <input id="{{ form.start_angle.id_for_label }}" name="{{ form.start_angle.html_name }}" type="number"
-               class="form-control" value="{{ form.start_angle.value }}" step="0.1">
+               class="form-control" value="{{ form.start_angle.value }}" step="0.1" required>
     </div>
 {% endblock %}
 
@@ -51,7 +51,7 @@
         <div class="invalid-feedback">{{ form.body_mass.errors }}</div>
         {{ form.body_mass.label_tag }}
         <input id="{{ form.body_mass.id_for_label }}" name="{{ form.body_mass.html_name }}" type="number"
-               class="form-control" value="{{ form.body_mass.value }}" step="0.001" min="0.001">
+               class="form-control" value="{{ form.body_mass.value }}" step="0.001" min="0.001" required>
     </div>
 
     <div class="form-check">
@@ -75,7 +75,7 @@
         <div class="invalid-feedback">{{ form.body_density.errors }}</div>
         {{ form.body_density.label_tag }}
         <input id="{{ form.body_density.id_for_label }}" name="{{ form.body_density.html_name }}" type="number"
-               class="form-control" value="{{ form.body_density.value }}">
+               class="form-control" value="{{ form.body_density.value }}" required>
     </fieldset>
 
     <div class="form-check">
@@ -91,7 +91,7 @@
         {{ form.resistance_coefficient.label_tag }}
         <input id="{{ form.resistance_coefficient.id_for_label }}" name="{{ form.resistance_coefficient.html_name }}"
                type="number"
-               class="form-control" value="{{ form.resistance_coefficient.value }}">
+               class="form-control" value="{{ form.resistance_coefficient.value }}" required>
     </fieldset>
 
     <div class="form-check">
@@ -105,14 +105,49 @@
         <div class="invalid-feedback">{{ form.wind_speed.errors }}</div>
         {{ form.wind_speed.label_tag }}
         <input id="{{ form.wind_speed.id_for_label }}" name="{{ form.wind_speed.html_name }}" type="number"
-               class="form-control" value="{{ form.wind_speed.value }}">
+               class="form-control" value="{{ form.wind_speed.value }}" required>
     </fieldset>
 
     <fieldset class="form-group" v-if="using_environment_resistance || using_archimedes_force">
-        <div class="invalid-feedback">{{ form.environment_density.errors }}</div>
-        {{ form.environment_density.label_tag }}
-        <input id="{{ form.environment_density.id_for_label }}" name="{{ form.environment_density.html_name }}"
-               type="number"
-               class="form-control" value="{{ form.environment_density.value }}">
+        <div class="form-check">
+            <label for="{{ form.water_environment.id_for_label }}" class="form-check-label">
+                <input type="checkbox" class="form-check-input" name="{{ form.water_environment.html_name }}"
+                       id="{{ form.water_environment.id_for_label }}" {% if form.water_environment.value %} checked {% endif %} v-model="water_environment">
+                {{ form.water_environment.label }}
+            </label>
+        </div>
+        <div v-if="water_environment_input">
+            <div class="invalid-feedback">{{ form.environment_density.errors }}</div>
+            {{ form.environment_density.label_tag }}
+            <input id="{{ form.environment_density.id_for_label }}" name="{{ form.environment_density.html_name }}"
+                   type="number"
+                   class="form-control" value="{{ form.environment_density.value }}" required>
+        </div>
     </fieldset>
+{% endblock %}
+
+{% block variables_list %}
+    <li class="list-group-item">Начальные условия: \( x_0 = {{ form.start_x.value }}\ м, y_0 = {{ form.start_y.value }}\ м,
+        v_0 = {{ form.start_speed.value }}\ м/с, \varphi = {{ form.start_angle.value }}^\circ \)</li>
+    {% for power in powers %}
+        <li class="list-group-item">{{ power }}</li>
+    {% empty %}
+        <li class="list-group-item">Нет действующих сил</li>
+    {% endfor %}
+{% endblock %}
+
+{% block experiment_table %}
+    <thead>
+        <tr>
+            <th>Время, с</th>
+            <th>Координата X, м</th>
+            <th>Координата Y, м</th>
+            <th>Компонента скорости X, м/с</th>
+            <th>Компонента скорости Y, м/с</th>
+        </tr>
+    </thead>
+    <tbody>
+{#        {%  %}#}
+{#        {%  %}#}
+    </tbody>
 {% endblock %}

@@ -15,6 +15,12 @@ var app = new Vue({
         using_complex_gravity: getBoolCookie('using_complex_gravity'),
         using_archimedes_force: getBoolCookie('using_archimedes_force'),
         using_environment_resistance: getBoolCookie('using_environment_resistance'),
-        using_wind: getBoolCookie('using_wind')
+        using_wind: getBoolCookie('using_wind'),
+        water_environment: getBoolCookie('water_environment')
+    },
+    computed: {
+        water_environment_input: function () {
+            return !this.water_environment;
+        }
     }
 });
