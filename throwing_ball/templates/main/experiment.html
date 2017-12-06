@@ -136,6 +136,7 @@
     {% endfor %}
 {% endblock %}
 
+{% load index %}
 {% block experiment_table %}
     <thead>
         <tr>
@@ -147,7 +148,14 @@
         </tr>
     </thead>
     <tbody>
-{#        {%  %}#}
-{#        {%  %}#}
+    {% for i in experiment_range %}
+        <tr>
+            <td>{{ experiment.0 | index:i }}</td>
+            <td>{{ experiment.1 | index:i }}</td>
+            <td>{{ experiment.2 | index:i }}</td>
+            <td>{{ experiment.3 | index:i }}</td>
+            <td>{{ experiment.4 | index:i }}</td>
+        </tr>
+    {% endfor %}
     </tbody>
 {% endblock %}

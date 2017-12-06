@@ -122,7 +122,7 @@ class System:
     def get_environment_density(self):
         if self.usingArchimedesForce is None and self.usingEnvironmentResistance is None:
             return 0
-        if self.startEnvironmentDensity > 0:
+        if self.startEnvironmentDensity and self.startEnvironmentDensity > 0:
             return self.startEnvironmentDensity
         else:
             for i in density_table.keys():

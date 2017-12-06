@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
+from .app.system import System
 from .forms import ThrowingBallForm
-from .app import system
 
 
 # Create your views here.
@@ -15,6 +15,25 @@ def throw_ball(request):
 
         if form.is_valid():
             pass
+
+        experiment = System(
+            body_mass=form.cleaned_data['body_mass'],
+            start_x=form.cleaned_data['start_x'],
+            start_y=form.cleaned_data['start_y'],
+            start_speed=form.cleaned_data['start_speed'],
+            start_angle=form.cleaned_data['start_angle'],
+            step_amount=form.cleaned_data['step_amount'],
+            experiment_time=form.cleaned_data['experiment_time'],
+            using_complex_gravity=form.cleaned_data['using_complex_gravity'],
+            using_archimedes_force=form.cleaned_data['using_archimedes_force'],
+            body_density=form.cleaned_data['body_density'],
+            environment_density=-1 if form.cleaned_data['water_environment'] else form.cleaned_data[
+                'environment_density'],
+            using_environment_resistance=form.cleaned_data['using_environment_resistance'],
+            resistance_coefficient=form.cleaned_data['resistance_coefficient'],
+            using_wind=form.cleaned_data['using_wind'],
+            wind_speed=form.cleaned_data['wind_speed']
+        ).perform_experiment()
 
         powers = []
         if form.cleaned_data['using_complex_gravity']:
@@ -37,7 +56,9 @@ def throw_ball(request):
         response = render(request, 'main/experiment.html', {
             'title': 'Моделирование движения тела, брошенного под углом к горизонту',
             'form': form,
-            'powers': powers
+            'powers': powers,
+            'experiment': experiment,
+            'experiment_range': range(len(experiment[0]))
         })
         response.set_cookie(key='using_complex_gravity', value=form.cleaned_data['using_complex_gravity'])
         response.set_cookie(key='using_archimedes_force', value=form.cleaned_data['using_archimedes_force'])
@@ -48,9 +69,15 @@ def throw_ball(request):
     else:
         form = ThrowingBallForm()
 
+        experiment = System(body_mass=1, start_x=0, start_y=100, start_speed=15, start_angle=45, step_amount=100,
+                            experiment_time=100, using_complex_gravity=False, using_archimedes_force=False,
+                            using_environment_resistance=False, using_wind=False).perform_experiment()
+
         response = render(request, 'main/experiment.html', {
             'title': 'Моделирование движения тела, брошенного под углом к горизонту',
-            'form': form
+            'form': form,
+            'experiment': experiment,
+            'experiment_range': range(len(experiment[0]))
         })
         response.set_cookie(key='using_complex_gravity', value=False)
         response.set_cookie(key='using_archimedes_force', value=False)
