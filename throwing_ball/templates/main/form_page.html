@@ -30,6 +30,13 @@
                         {% endblock %}
                     </fieldset>
 
+                    <fieldset class="form-group">
+                        <legend>Параметры построения графика</legend>
+
+                        {% block graphic_parameters %}
+                        {% endblock %}
+                    </fieldset>
+
                     <button class="btn btn-primary">Рассчитать</button>
                 </form>
             </div>
@@ -44,6 +51,12 @@
                     {% block experiment_table %}
                     {% endblock %}
                 </table>
+            </div>
+            <div class="col-12 mt-2">
+                <div id="google-chart">
+                    {% block google_chart %}
+                    {% endblock %}
+                </div>
             </div>
         </div>
     </main>

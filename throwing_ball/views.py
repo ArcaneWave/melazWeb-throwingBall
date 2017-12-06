@@ -26,14 +26,45 @@ def throw_ball(request):
             experiment_time=form.cleaned_data['experiment_time'],
             using_complex_gravity=form.cleaned_data['using_complex_gravity'],
             using_archimedes_force=form.cleaned_data['using_archimedes_force'],
-            body_density=form.cleaned_data['body_density'],
-            environment_density=-1 if form.cleaned_data['water_environment'] else form.cleaned_data[
-                'environment_density'],
+            body_density=form.cleaned_data.get('body_density', 4200),
+            environment_density=form.cleaned_data['environment_density'] if form.cleaned_data[
+                'water_environment'] else -1,
             using_environment_resistance=form.cleaned_data['using_environment_resistance'],
-            resistance_coefficient=form.cleaned_data['resistance_coefficient'],
+            resistance_coefficient=form.cleaned_data.get('resistance_coefficient', 1),
             using_wind=form.cleaned_data['using_wind'],
-            wind_speed=form.cleaned_data['wind_speed']
+            wind_speed=form.cleaned_data.get('wind_speed', -4)
         ).perform_experiment()
+
+        func = form.cleaned_data['graphic_to_display']
+        google_chart_holder = {
+            'x': {
+                'data': experiment[1],
+                'title': 'График зависимости координаты x от времени',
+                'axis_title': 'Расстояние по оси x, м'
+            },
+            'y': {
+                'data': experiment[2],
+                'title': 'График зависимости координаты y от времени',
+                'axis_title': 'Расстояние по оси y, м'
+            },
+            'vx': {
+                'data': experiment[3],
+                'title': 'График зависимости кмпоненты x скорости от времени',
+                'axis_title': 'Компонента скорости по оси x, м/с'
+            },
+            'vy': {
+                'data': experiment[4],
+                'title': 'График зависимости кмпоненты y скорости от времени',
+                'axis_title': 'Компонента скорости по оси y, м/с'
+            }
+        }
+        google_chart = {
+            'data': list(
+                map(list,
+                    list(zip(*[experiment[0], google_chart_holder[func]['data']])))),
+            'title': google_chart_holder[func]['title'],
+            'axis_title': google_chart_holder[func]['axis_title']
+        }
 
         powers = []
         if form.cleaned_data['using_complex_gravity']:
@@ -58,7 +89,9 @@ def throw_ball(request):
             'form': form,
             'powers': powers,
             'experiment': experiment,
-            'experiment_range': range(len(experiment[0]))
+            'experiment_range': range(len(experiment[0])),
+            'curr_graphic': form.cleaned_data['graphic_to_display'],
+            'google_chart': google_chart
         })
         response.set_cookie(key='using_complex_gravity', value=form.cleaned_data['using_complex_gravity'])
         response.set_cookie(key='using_archimedes_force', value=form.cleaned_data['using_archimedes_force'])
@@ -73,16 +106,24 @@ def throw_ball(request):
                             experiment_time=100, using_complex_gravity=False, using_archimedes_force=False,
                             using_environment_resistance=False, using_wind=False).perform_experiment()
 
+        google_chart = {
+            'data': list(map(list, list(zip(*experiment[0:2])))),
+            'title': 'График зависимости координаты x от времени',
+            'axis_title': 'Расстояние по оси x, м'
+        }
+
         response = render(request, 'main/experiment.html', {
             'title': 'Моделирование движения тела, брошенного под углом к горизонту',
             'form': form,
             'experiment': experiment,
-            'experiment_range': range(len(experiment[0]))
+            'experiment_range': range(len(experiment[0])),
+            'curr_graphic': 'x',
+            'google_chart': google_chart
         })
         response.set_cookie(key='using_complex_gravity', value=False)
         response.set_cookie(key='using_archimedes_force', value=False)
         response.set_cookie(key='using_environment_resistance', value=False)
         response.set_cookie(key='using_wind', value=False)
-        response.set_cookie(key='water_environment', value=False)
+        response.set_cookie(key='water_environment', value=True)
 
     return response

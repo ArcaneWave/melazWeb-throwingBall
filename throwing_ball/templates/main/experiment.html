@@ -1,5 +1,32 @@
 {% extends 'main/form_page.html' %}
 
+{% block head_scripts %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {packages: ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable({{ google_chart.data }}, true);
+            var chart = new google.visualization.LineChart(document.getElementById('google-chart'));
+            var options = {
+                title: '{{ google_chart.title }}',
+                hAxis: {
+                    title: 'Время, с'
+                },
+                vAxis: {
+                    title: '{{ google_chart.axis_title }}'
+                },
+                legend: {
+                    position: 'none'
+                }
+            };
+
+            chart.draw(data, options);
+        }
+    </script>
+{% endblock %}
+
 {% block throw_ball_active %}
     active
 {% endblock %}
@@ -82,7 +109,8 @@
         <label for="{{ form.using_environment_resistance.id_for_label }}" class="form-check-label">
             <input type="checkbox" class="form-check-input" name="{{ form.using_environment_resistance.html_name }}"
                    id="{{ form.using_environment_resistance.id_for_label }}"
-                    {% if form.using_environment_resistance.value %} checked {% endif %} v-model="using_environment_resistance">
+                    {% if form.using_environment_resistance.value %} checked {% endif %}
+                   v-model="using_environment_resistance">
             {{ form.using_environment_resistance.label }}
         </label>
     </div>
@@ -97,7 +125,8 @@
     <div class="form-check">
         <label for="{{ form.using_wind.id_for_label }}" class="form-check-label">
             <input type="checkbox" class="form-check-input" name="{{ form.using_wind.html_name }}"
-                   id="{{ form.using_wind.id_for_label }}" {% if form.using_wind.value %} checked {% endif %} v-model="using_wind">
+                   id="{{ form.using_wind.id_for_label }}" {% if form.using_wind.value %} checked {% endif %}
+                   v-model="using_wind">
             {{ form.using_wind.label }}
         </label>
     </div>
@@ -112,11 +141,12 @@
         <div class="form-check">
             <label for="{{ form.water_environment.id_for_label }}" class="form-check-label">
                 <input type="checkbox" class="form-check-input" name="{{ form.water_environment.html_name }}"
-                       id="{{ form.water_environment.id_for_label }}" {% if form.water_environment.value %} checked {% endif %} v-model="water_environment">
+                       id="{{ form.water_environment.id_for_label }}" {% if form.water_environment.value %}
+                       checked {% endif %} v-model="water_environment">
                 {{ form.water_environment.label }}
             </label>
         </div>
-        <div v-if="water_environment_input">
+        <div v-if="water_environment">
             <div class="invalid-feedback">{{ form.environment_density.errors }}</div>
             {{ form.environment_density.label_tag }}
             <input id="{{ form.environment_density.id_for_label }}" name="{{ form.environment_density.html_name }}"
@@ -127,8 +157,9 @@
 {% endblock %}
 
 {% block variables_list %}
-    <li class="list-group-item">Начальные условия: \( x_0 = {{ form.start_x.value }}\ м, y_0 = {{ form.start_y.value }}\ м,
-        v_0 = {{ form.start_speed.value }}\ м/с, \varphi = {{ form.start_angle.value }}^\circ \)</li>
+    <li class="list-group-item">Начальные условия: \( x_0 = {{ form.start_x.value }}\ м, y_0 = {{ form.start_y.value }}\
+        м, v_0 = {{ form.start_speed.value }}\ м/с, \varphi = {{ form.start_angle.value }}^\circ \)
+    </li>
     {% for power in powers %}
         <li class="list-group-item">{{ power }}</li>
     {% empty %}
@@ -136,16 +167,29 @@
     {% endfor %}
 {% endblock %}
 
+{% block graphic_parameters %}
+    {% for radio in form.graphic_to_display %}
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="{{ form.graphic_to_display.html_name }}"
+                       id="{{ radio.id_for_label }}" value="{{ radio.data.value }}"
+                       {% if radio.data.value == curr_graphic %}checked{% endif %}>
+                {{ radio.choice_label }}
+            </label>
+        </div>
+    {% endfor %}
+{% endblock %}
+
 {% load index %}
 {% block experiment_table %}
     <thead>
-        <tr>
-            <th>Время, с</th>
-            <th>Координата X, м</th>
-            <th>Координата Y, м</th>
-            <th>Компонента скорости X, м/с</th>
-            <th>Компонента скорости Y, м/с</th>
-        </tr>
+    <tr>
+        <th>Время, с</th>
+        <th>Координата X, м</th>
+        <th>Координата Y, м</th>
+        <th>Компонента скорости X, м/с</th>
+        <th>Компонента скорости Y, м/с</th>
+    </tr>
     </thead>
     <tbody>
     {% for i in experiment_range %}
@@ -158,4 +202,7 @@
         </tr>
     {% endfor %}
     </tbody>
+{% endblock %}
+
+{% block google_chart %}
 {% endblock %}

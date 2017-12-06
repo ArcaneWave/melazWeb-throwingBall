@@ -6,7 +6,11 @@ function getCookie(name) {
 }
 
 function getBoolCookie(name) {
-    return getCookie(name).toLowerCase() === 'true';
+    var cookie = getCookie(name);
+    if (cookie)
+        return cookie.toLowerCase() === 'true';
+    else
+        return false
 }
 
 var app = new Vue({
@@ -17,10 +21,5 @@ var app = new Vue({
         using_environment_resistance: getBoolCookie('using_environment_resistance'),
         using_wind: getBoolCookie('using_wind'),
         water_environment: getBoolCookie('water_environment')
-    },
-    computed: {
-        water_environment_input: function () {
-            return !this.water_environment;
-        }
     }
 });
