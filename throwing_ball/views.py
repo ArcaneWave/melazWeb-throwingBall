@@ -65,6 +65,7 @@ def throw_ball(request):
             'title': google_chart_holder[func]['title'],
             'axis_title': google_chart_holder[func]['axis_title']
         }
+        coordinates = experiment[0:3]
 
         powers = []
         if form.cleaned_data['using_complex_gravity']:
@@ -91,7 +92,8 @@ def throw_ball(request):
             'experiment': experiment,
             'experiment_range': range(len(experiment[0])),
             'curr_graphic': form.cleaned_data['graphic_to_display'],
-            'google_chart': google_chart
+            'google_chart': google_chart,
+            'coordinates': coordinates
         })
         response.set_cookie(key='using_complex_gravity', value=form.cleaned_data['using_complex_gravity'])
         response.set_cookie(key='using_archimedes_force', value=form.cleaned_data['using_archimedes_force'])
@@ -111,6 +113,7 @@ def throw_ball(request):
             'title': 'График зависимости координаты x от времени',
             'axis_title': 'Расстояние по оси x, м'
         }
+        coordinates = experiment[0:3]
 
         response = render(request, 'main/experiment.html', {
             'title': 'Моделирование движения тела, брошенного под углом к горизонту',
@@ -118,7 +121,8 @@ def throw_ball(request):
             'experiment': experiment,
             'experiment_range': range(len(experiment[0])),
             'curr_graphic': 'x',
-            'google_chart': google_chart
+            'google_chart': google_chart,
+            'coordinates': coordinates
         })
         response.set_cookie(key='using_complex_gravity', value=False)
         response.set_cookie(key='using_archimedes_force', value=False)

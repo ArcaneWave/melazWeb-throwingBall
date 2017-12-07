@@ -115,6 +115,8 @@ class System:
             self.result[10][i] = self.environmentDensity
 
             if self.currentY == 0:
+                for j in range(11):
+                    self.result[j] = self.result[j][:i + 1:]
                 break
 
         return self.result
