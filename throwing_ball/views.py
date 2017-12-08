@@ -40,30 +40,41 @@ def throw_ball(request):
             'x': {
                 'data': experiment[1],
                 'title': 'График зависимости координаты x от времени',
-                'axis_title': 'Расстояние по оси x, м'
+                'sub_axis_title': 'Расстояние по оси x, м',
+                'main_axis_title': 'Время, с'
             },
             'y': {
                 'data': experiment[2],
                 'title': 'График зависимости координаты y от времени',
-                'axis_title': 'Расстояние по оси y, м'
+                'sub_axis_title': 'Расстояние по оси y, м',
+                'main_axis_title': 'Время, с'
             },
             'vx': {
                 'data': experiment[3],
                 'title': 'График зависимости кмпоненты x скорости от времени',
-                'axis_title': 'Компонента скорости по оси x, м/с'
+                'sub_axis_title': 'Компонента скорости по оси x, м/с',
+                'main_axis_title': 'Время, с'
             },
             'vy': {
                 'data': experiment[4],
                 'title': 'График зависимости кмпоненты y скорости от времени',
-                'axis_title': 'Компонента скорости по оси y, м/с'
+                'sub_axis_title': 'Компонента скорости по оси y, м/с',
+                'main_axis_title': 'Время, с'
+            },
+            'xy': {
+                'data': experiment[1:3],
+                'title': 'Траектория полёта мяча',
+                'sub_axis_title': 'Расстояние по оси y, м',
+                'main_axis_title': 'Расстояние по оси x, м'
             }
         }
         google_chart = {
-            'data': list(
-                map(list,
-                    list(zip(*[experiment[0], google_chart_holder[func]['data']])))),
+            'data': list(map(list, list(zip(*[experiment[0], google_chart_holder[func]['data']]))))
+            if form.cleaned_data['graphic_to_display'] != 'xy'
+            else list(map(list, list(zip(*google_chart_holder[func]['data'])))),
             'title': google_chart_holder[func]['title'],
-            'axis_title': google_chart_holder[func]['axis_title']
+            'sub_axis_title': google_chart_holder[func]['sub_axis_title'],
+            'main_axis_title': google_chart_holder[func]['main_axis_title']
         }
         coordinates = experiment[0:3]
 
@@ -111,7 +122,8 @@ def throw_ball(request):
         google_chart = {
             'data': list(map(list, list(zip(*experiment[0:2])))),
             'title': 'График зависимости координаты x от времени',
-            'axis_title': 'Расстояние по оси x, м'
+            'sub_axis_title': 'Расстояние по оси x, м',
+            'main_axis_title': 'Время, с'
         }
         coordinates = experiment[0:3]
 
