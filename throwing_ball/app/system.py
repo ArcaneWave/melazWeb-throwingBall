@@ -98,10 +98,13 @@ class System:
             self.currentY = self.currentY + self.currentSpeedY * self.step
 
             if self.currentY <= 0:
-                self.currentY = 0
-                self.currentSpeedX = 0
-                self.currentSpeedY = 0
-                gravity = arch_force = resistance_x = resistance_y = wind_speed = 0
+                if (i < 1):
+                    pass
+                else:
+                    self.currentY = 0
+                    self.currentSpeedX = 0
+                    self.currentSpeedY = 0
+                    gravity = arch_force = resistance_x = resistance_y = wind_speed = 0
 
             self.currentTime += self.step
 
