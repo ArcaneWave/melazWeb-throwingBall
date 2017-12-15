@@ -16,7 +16,7 @@ class System:
                  ):
 
         # Main
-        start_angle = abs(90 - start_angle / 180 * pi)
+        start_angle = abs(90 - start_angle) % 180 / 180 * pi
         self.currentTime = 0
         self.bodyMass = body_mass
         self.currentX = start_x
