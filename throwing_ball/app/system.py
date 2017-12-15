@@ -1,4 +1,4 @@
-from math import cos, sin, sqrt
+from math import cos, sin, sqrt, pi
 
 density_table = {120000: 0.000000002440, 100000: 0.0000000555, 50000: 0.0001027, 20000: 0.089,
                  15000: 0.195, 12000: 0.312, 10000: 0.414, 8000: 0.526, 5000: 0.736, 3000: 0.909, 2000: 1.007,
@@ -16,13 +16,14 @@ class System:
                  ):
 
         # Main
+        start_angle = start_angle / 180 * pi
         self.currentTime = 0
         self.bodyMass = body_mass
         self.currentX = start_x
         self.currentY = start_y
-        self.currentSpeedX = start_speed * cos(start_angle)
+        self.currentSpeedX = start_speed * sin(start_angle)
         self.startx = self.currentSpeedX
-        self.currentSpeedY = start_speed * sin(start_angle)
+        self.currentSpeedY = start_speed * cos(start_angle)
         self.experimentTime = experiment_time
         self.stepAmount = step_amount
         self.result = [[0] * self.stepAmount for _ in range(11)]
