@@ -21,9 +21,9 @@ class System:
         self.bodyMass = body_mass
         self.currentX = start_x
         self.currentY = start_y
-        self.currentSpeedX = start_speed * sin(start_angle)
+        self.currentSpeedX = start_speed * cos(start_angle)
         self.startx = self.currentSpeedX
-        self.currentSpeedY = start_speed * cos(start_angle)
+        self.currentSpeedY = start_speed * sin(start_angle)
         self.experimentTime = experiment_time
         self.stepAmount = step_amount
         self.result = [[0] * self.stepAmount for _ in range(11)]
