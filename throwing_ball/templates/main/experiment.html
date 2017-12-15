@@ -214,10 +214,11 @@
 
 {% load static %}
 {% block animation %}
-    <div class="ball-animation">
+    <div class="ball-animation text-left">
         <img alt="шар" id="ball-1" class="ball" src="{% static 'img/filled-circle.svg' %}"
              @click="animate_ball('ball-1')">
     </div>
+    <hr/>
 {% endblock %}
 
 {% block custom_script %}
