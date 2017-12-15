@@ -9,8 +9,15 @@
 
 .ball-animation {
     height: 75vh;
+}
+
+.ball-animation + hr {
+    background-color: #000000;
+    margin-top: 0;
     margin-bottom: 10px;
-    border-bottom: #000000 1px solid;
+    width: calc(100% + 50px);
+    position: relative;
+    left: -50px;
 }
 
 .ball {

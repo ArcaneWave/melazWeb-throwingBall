@@ -42,26 +42,19 @@ var app = new Vue({
 
                 if (i < that.ball_animation.coordinates[0].length) {
 
-                    const xi = that.ball_animation.coordinates[1][i] * 75 / max_w;
-                    const yi = 100 - that.ball_animation.coordinates[2][i] * 100 / max_h;
+                    const xi = that.ball_animation.coordinates[1][i] * 100 / max_w;
+                    const yi = 75 - that.ball_animation.coordinates[2][i] * 75 / max_h;
 
-                    const xi_1 = that.ball_animation.coordinates[1][i - 1] * 75 / max_w;
-                    const yi_1 = 100 - that.ball_animation.coordinates[2][i - 1] * 100 / max_h;
+                    const xi_1 = that.ball_animation.coordinates[1][i - 1] * 100 / max_w;
+                    const yi_1 = 75 - that.ball_animation.coordinates[2][i - 1] * 75 / max_h;
 
                     animate(function (dt) {
                         const x = xi_1 + (xi - xi_1) / h * dt;
                         const y = yi_1 + (yi - yi_1) / h * dt;
 
-                        console.log(x, y);
-
-                        ball.style.marginLeft = 'calc(' + y + '% - 50px)';
-                        ball.style.marginTop = 'calc(' + x + 'vh - 50px)';
+                        ball.style.marginLeft = 'calc(' + x + '% - 50px)';
+                        ball.style.marginTop = 'calc(' + y + 'vh - 50px)';
                     }, h);
-
-                    //         if (xi === 50) {
-                    //             that.ball_animation.flying = false;
-                    //             return;
-                    //         }
 
                     i++;
                     setTimeout(step, h, that);
