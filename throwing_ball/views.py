@@ -86,8 +86,8 @@ def throw_ball(request):
                 'Сила Архимеда: \( \\rho_{{тела}} = {body_density}\ кг/м^3, \\rho_{{среды}} = {environment_density}\ '
                 'кг/м^3 \)'.
                 format(body_density=form.cleaned_data['body_density'],
-                       environment_density='вычисляется\ по\ таблице' if
-                       form.cleaned_data['water_environment'] else form.cleaned_data['environment_density']))
+                       form.cleaned_data['environment_density'] if
+                       form.cleaned_data['water_environment'] else environment_density='вычисляется\ по\ таблице'))
         if form.cleaned_data['using_environment_resistance']:
             powers.append(
                 'Коэффициент сопротивления окружающей среды: \( k_{{сопротивления}} = {resistance_coefficient} \)'.
