@@ -1,7 +1,5 @@
 from math import cos, sin, sqrt
 
-#Ха-ха смотри чё могу!
-
 density_table = {120000: 0.000000002440, 100000: 0.0000000555, 50000: 0.0001027, 20000: 0.089,
                  15000: 0.195, 12000: 0.312, 10000: 0.414, 8000: 0.526, 5000: 0.736, 3000: 0.909, 2000: 1.007,
                  1000: 1.112, 500: 1.167, 300: 1.190, 200: 1.202, 100: 1.213, 50: 1.219, 0: 1.225}
@@ -23,6 +21,7 @@ class System:
         self.currentX = start_x
         self.currentY = start_y
         self.currentSpeedX = start_speed * cos(start_angle)
+        self.startx = self.currentSpeedX
         self.currentSpeedY = start_speed * sin(start_angle)
         self.experimentTime = experiment_time
         self.stepAmount = step_amount
@@ -74,6 +73,7 @@ class System:
             if self.currentSpeedY > 0:
                 resistance_y *= -1
             current_resultant_x = wind_speed + resistance_x
+
             current_resultant_y = -gravity + arch_force + resistance_y
 
             if self.currentSpeedX * current_resultant_x > 0:
@@ -136,7 +136,7 @@ class System:
     # Gravity
     def get_current_gravity(self):
         if self.usingComplexGravity:
-            return 0.0000000000067408 * (5972400000000000000000000 * self.bodyMass) / (
+            return 0.000000000067408 * (5972400000000000000000000 * self.bodyMass) / (
                     (6371000 + self.currentY) * (6371000 + self.currentY))
         else:
             return 9.81
@@ -179,13 +179,7 @@ class System:
     # Main
 
     def get_maximum_x_speed(self):
-        if self.usingEnvironmentResistance:
-            if self.environmentDensity > 2:
-                return self.bodyMass / self.resistanceCoefficient
-            else:
-                return sqrt(self.bodyMass / self.resistanceCoefficient)
-        else:
-            return 9999999999999
+        return abs(self.startx) + abs(self.windSpeed)
 
     def get_maximum_speed(self):
         if self.usingEnvironmentResistance:
