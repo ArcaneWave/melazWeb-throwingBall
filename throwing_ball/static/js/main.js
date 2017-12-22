@@ -23,7 +23,11 @@ var app = new Vue({
         water_environment: getBoolCookie('water_environment'),
         ball_animation: {
             coordinates: null,
-            flying: false
+            flying: false,
+            curr_coordinates: {
+                x: 'undefined',
+                y: 'undefined'
+            }
         }
     },
     methods: {
@@ -42,15 +46,22 @@ var app = new Vue({
 
                 if (i < that.ball_animation.coordinates[0].length) {
 
-                    const xi = that.ball_animation.coordinates[1][i] * 100 / max_w;
-                    const yi = 75 - that.ball_animation.coordinates[2][i] * 75 / max_h;
+                    const xi_real = that.ball_animation.coordinates[1][i];
+                    const yi_real = that.ball_animation.coordinates[2][i];
+                    const xi = xi_real * 100 / max_w;
+                    const yi = 75 - yi_real * 75 / max_h;
 
-                    const xi_1 = that.ball_animation.coordinates[1][i - 1] * 100 / max_w;
-                    const yi_1 = 75 - that.ball_animation.coordinates[2][i - 1] * 75 / max_h;
+                    const xi_1_real = that.ball_animation.coordinates[1][i - 1];
+                    const yi_1_real = that.ball_animation.coordinates[2][i - 1];
+                    const xi_1 = xi_1_real * 100 / max_w;
+                    const yi_1 = 75 - yi_1_real * 75 / max_h;
 
                     animate(function (dt) {
                         const x = xi_1 + (xi - xi_1) / h * dt;
                         const y = yi_1 + (yi - yi_1) / h * dt;
+
+                        that.ball_animation.curr_coordinates.x = xi_1_real + (xi_real - xi_1_real) / h * dt;
+                        that.ball_animation.curr_coordinates.y = yi_1_real + (yi_real - yi_1_real) / h * dt;
 
                         ball.style.marginLeft = 'calc(' + x + '% - 50px)';
                         ball.style.marginTop = 'calc(' + y + 'vh - 50px)';
@@ -63,7 +74,7 @@ var app = new Vue({
                 }
             };
 
-            var i = 2;
+            var i = 1;
             step(this);
         }
     }

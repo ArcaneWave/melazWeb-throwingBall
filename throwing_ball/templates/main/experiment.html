@@ -214,6 +214,10 @@
 
 {% load static %}
 {% block animation %}
+    <p><strong>Текущие координаты: </strong>
+        [{% templatetag openvariable %} ball_animation.curr_coordinates.x {% templatetag closevariable %},
+        {% templatetag openvariable %} ball_animation.curr_coordinates.y {% templatetag closevariable %}]
+    </p>
     <div class="ball-animation text-left">
         <img alt="шар" id="ball-1" class="ball" src="{% static 'img/filled-circle.svg' %}"
              @click="animate_ball('ball-1')">
